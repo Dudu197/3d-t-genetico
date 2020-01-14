@@ -1,11 +1,12 @@
 module.exports = class Personagem {
-	constructor(config) {
+	constructor(nome, config) {
 		this.pontos = config.inicial.pontos;
 		this.debug = config.debug;
 
 		this.pontosVida = 0;
 		this.vivo = true;
 		this.abates = 0;
+		this.nome = nome;
 		// PdF será ignorado pois será o mesmo que a força nos combates
 		this.atributos = {
 			forca: 0,
@@ -18,12 +19,16 @@ module.exports = class Personagem {
 			this.evoluir();
 		}
 
-		if(this.atributos.resistencia > 0) {
-			this.pontosVida = 5 * this.atributos.resistencia;
-		} else {
-			this.atributos.resistencia = 1;
-		}
+		this.pontosVida = this.vidaMaxima();
 	}
+
+	vidaMaxima () {
+		if(this.atributos.resistencia > 0) {
+			return 5 * this.atributos.resistencia;
+		} else {
+			return 1;
+		}
+	};
 
 	evoluir() {
 		let atributo = parseInt(Math.random() * 4);
@@ -55,7 +60,9 @@ module.exports = class Personagem {
 		if(dado === 6){
 			forca *= 2;
 		}
-		return forca + habilidade + dado;
+		let dano = forca + habilidade + dado;
+		this.debugBatalha('Atacou com o dano ' + dano);
+		return dano;
 	}
 
 	defender() {
@@ -65,7 +72,9 @@ module.exports = class Personagem {
 		if(dado === 6){
 			armadura *= 2;
 		}
-		return armadura + habilidade + dado;
+		let defesa = armadura + habilidade + dado;
+		this.debugBatalha('Defendeu ' + defesa);
+		return defesa;
 	}
 
 	apanhar(dano) {
@@ -74,7 +83,20 @@ module.exports = class Personagem {
 			this.pontosVida -= dano;
 			if(this.pontosVida <= 0) {
 				this.vivo = false;
+				this.pontosVida = 0;
+				this.debugBatalha('Está morto');
 			}
+		}
+	}
+
+	vencedor() {
+		this.abates++;
+		this.debugBatalha('Venceu a batalha');
+	}
+
+	debugBatalha(mensagem) {
+		if(this.debug.simularBatalhas) {
+			console.log(this.nome + ': ' + mensagem);
 		}
 	}
 
