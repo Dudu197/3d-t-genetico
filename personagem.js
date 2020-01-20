@@ -7,6 +7,7 @@ module.exports = class Personagem {
 		this.vivo = true;
 		this.abates = 0;
 		this.nome = nome;
+		this.pocoesVida = config.inicial.pocoesVida;
 		// PdF será ignorado pois será o mesmo que a força nos combates
 		this.atributos = {
 			forca: 0,
@@ -50,7 +51,9 @@ module.exports = class Personagem {
 	}
 
 	rolarDados() {
-		return parseInt(Math.random() * 6) + 1;
+		let dado = parseInt(Math.random() * 6) + 1;
+		this.debugBatalha('Rolou o dado: ' + dado);
+		return dado;
 	}
 
 	atacar() {
@@ -91,7 +94,25 @@ module.exports = class Personagem {
 
 	vencedor() {
 		this.abates++;
+		this.usarPocaoVida();
 		this.debugBatalha('Venceu a batalha');
+	}
+
+	usarPocaoVida(){
+		let vidaMaxima = this.vidaMaxima();
+		if(this.pontosVida < vidaMaxima && this.pocoesVida > 0) {
+			this.debugBatalha('Utilizou uma poção de vida');
+			this.pocoesVida--;
+			this.pontosVida += 5;
+			if(this.pontosVida > vidaMaxima) {
+				this.pontosVida = vidaMaxima;
+			}
+			// this.pontosVida = vidaMaxima;
+		}
+	}
+
+	adicionarPocaoVida(quantidade) {
+		this.pocoesVida += quantidade;
 	}
 
 	debugBatalha(mensagem) {
