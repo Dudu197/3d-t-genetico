@@ -7,7 +7,7 @@ const NOMES = require('./nomes.json');
 let config = {
 	inicial: {
 		pontos: 5,
-		populacao: 1000,
+		populacao: 500000,
 		pocoesVida: 0
 	},
 	subirLevel: {
@@ -38,7 +38,7 @@ for (var i = 0; i < config.inicial.populacao; i++) {
 }
 
 
-for (var i = 0; i < 15; i++) {
+for (var i = 0; i < 50; i++) {
 	viloes.push(gerarPersonagem());
 }
 
@@ -61,3 +61,6 @@ console.log('Sobreviventes: ', sobreviventes.length)
 if(sobreviventes.length > 0){
 	console.log(sobreviventes[parseInt(Math.random() * sobreviventes.length)]);
 }
+
+// let exporter = require('./exporter.js');
+// exporter.toJson(personagens, './saida/teste.json')

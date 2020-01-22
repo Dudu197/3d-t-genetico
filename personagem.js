@@ -122,5 +122,3 @@ module.exports = class Personagem {
 	}
 
 };
-
-// module.exports.Personagem;
